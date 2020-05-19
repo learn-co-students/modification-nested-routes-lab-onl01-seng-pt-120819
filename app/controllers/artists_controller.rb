@@ -8,12 +8,17 @@ class ArtistsController < ApplicationController
   end
 
   def new
-    @artist = Artist.new
+    if params[:artist_id] && !Artist.exists?(params[:artist_id])
+      redirect_to artists_path, alert: "Artist not found."
+    else
+      @sng = Song.new(artist_id: params[:artist_id])
+    end
   end
 
   def create
     @artist = Artist.new(artist_params)
-
+    # @artist.save
+    # redirct_to artist_path(@artist)
     if @artist.save
       redirect_to @artist
     else
